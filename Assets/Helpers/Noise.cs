@@ -41,27 +41,35 @@ namespace Assets.Helpers
             {
                 for (y = 0; y < mapHeight; y++)
                 {
+                    // Define base values for amplitude, frequency and noiseHeight
                     float amplitude = 1;
                     float frequency = 1;
                     float noiseHeight = 0;
+
+                    // Calculate noise for each octave
                     for (int i = 0; i < octaves; i++)
                     {
+                        // We sample a point (x,y)
                         float sampleX = (x - halfWidth) / scale * frequency + octaveOffsets[i].x;
                         float sampleY = (y - halfHeight) / scale * frequency + octaveOffsets[i].y;
 
                         // Use unity's implementation of perlin noise
                         float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
 
+                        // noiseHeight is our final noise, we add all octaves together here
                         noiseHeight += perlinValue * amplitude;
                         amplitude *= persistance;
                         frequency *= lacunarity;
                     }
 
+                    // We need to find the min and max noise height in our noisemap
+                    // So that we can later interpolate the min and max values between 0 and 1 again
                     if (noiseHeight > maxNoiseHeight)
                         maxNoiseHeight = noiseHeight;
                     else if (noiseHeight < minNoiseHeight)
                         minNoiseHeight = noiseHeight;
 
+                    // Assign our noise
                     noiseMap[y * mapWidth + x] = noiseHeight;
                 }
             }
