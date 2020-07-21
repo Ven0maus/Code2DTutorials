@@ -2,13 +2,14 @@
 {
     public enum GroundTileType
     {
-        /* 0 - 1000 */
-        DeepWater = 0,
-        UndeepWater = 1,
-        Beach = 2,
-        Grass = 3,
-        Dirt = 4,
-        Mountain = 5,
-        Snow = 6
+        /* 1 - 1000 */
+        Empty = 0, // Empty default
+        DeepWater = 1,
+        UndeepWater = 2,
+        Beach = 3,
+        Grass = 4,
+        Dirt = 5,
+        Mountain = 6,
+        Snow = 7
     }
 }

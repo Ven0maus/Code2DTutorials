@@ -36,7 +36,7 @@ namespace Assets.ScriptableObjects
             TileTypes = TileTypes.OrderBy(a => a.Height).ToArray();
 
             // Pass along our parameters to generate our noise
-            var noiseMap = Noise.GenerateNoiseMap(tilemap.Width, tilemap.Height, tilemap.Seed, NoiseScale, Octaves, Persistance, Lacunarity, Offset);
+            var noiseMap = Noise.GenerateNoiseMap(tilemap.Width, tilemap.Height, tilemap.Grid.Seed, NoiseScale, Octaves, Persistance, Lacunarity, Offset);
 
             if (ApplyIslandGradient)
             {

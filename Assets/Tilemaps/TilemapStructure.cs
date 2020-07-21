@@ -1,63 +1,50 @@
 ﻿using Assets.ScriptableObjects;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Assets.Tilemaps
 {
+    public enum TilemapType
+    {
+        Ground,
+        Object
+    }
+
     public class TilemapStructure : MonoBehaviour
     {
-        public int Width, Height, TileSize, Seed;
+        [SerializeField]
+        private TilemapType _type;
+        public TilemapType Type { get { return _type; } }
+
+        [HideInInspector]
+        public int Width, Height;
+
         private int[] _tiles;
         private Tilemap _graphicMap;
 
-        [Serializable]
-        class TileType
-        {
-            public GroundTileType GroundTile;
-            public Color Color;
-        }
+        [HideInInspector]
+        public TileGrid Grid;
 
         [SerializeField]
         private AlgorithmBase[] _algorithms;
 
-        [SerializeField]
-        private TileType[] TileTypes;
-
-        private Dictionary<int, Tile> _tileTypeDictionary;
-
         /// <summary>
-        /// Method called by unity automatically.
+        /// Method to initialize our tilemap.
         /// </summary>
-        private void Awake()
+        public void Initialize()
         {
             // Retrieve the Tilemap component from the same object this script is attached to
             _graphicMap = GetComponent<Tilemap>();
 
+            // Retrive the TileGrid component from our parent gameObject
+            Grid = transform.parent.GetComponent<TileGrid>();
+
+            // Get width and height from parent
+            Width = Grid.Width;
+            Height = Grid.Height;
+
             // Initialize the one-dimensional array with our map size
             _tiles = new int[Width * Height];
-
-            // Initialize a dictionary lookup table to help us later
-            _tileTypeDictionary = new Dictionary<int, Tile>();
-
-            // We need to also assign a texture, so we create one real quick
-            var tileSprite = Sprite.Create(new Texture2D(TileSize, TileSize), new Rect(0, 0, TileSize, TileSize), new Vector2(0.5f, 0.5f), TileSize);
-
-            // Create a Tile for each GroundTileType
-            foreach (var tiletype in TileTypes)
-            {
-                // Create a scriptable object instance of type Tile (inherits from TileBase)
-                var tile = ScriptableObject.CreateInstance<Tile>();
-                // Make sure color is not transparant
-                tiletype.Color.a = 1;
-                // Set the tile color
-                tile.color = tiletype.Color;
-                // Assign the sprite we created earlier to our tiles
-                tile.sprite = tileSprite;
-                // Add to dictionary by key GroundTileType int value, value Tile
-                _tileTypeDictionary.Add((int)tiletype.GroundTile, tile);
-            }
 
             // Apply all the algorithms to the tilemap
             foreach (var algorithm in _algorithms)
@@ -87,7 +74,17 @@ namespace Assets.Tilemaps
                     // Get what tile is at this position
                     var typeOfTile = GetTile(x, y);
                     // Get the ScriptableObject that matches this type and insert it
-                    tilesArray[x * Width + y] = _tileTypeDictionary[typeOfTile];
+                    if (!Grid.Tiles.TryGetValue(typeOfTile, out Tile tile))
+                    {
+                        if (typeOfTile != 0)
+                        {
+                            Debug.LogError("Tile not defined for id: " + typeOfTile);
+                        }
+
+                        tilesArray[x * Width + y] = null;
+                        continue;
+                    }
+                    tilesArray[x * Width + y] = tile;
                 }
             }
 
