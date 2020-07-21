@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Assets.Tilemaps;
+using System;
+using UnityEngine;
 
-namespace Assets.Tilemaps
+namespace Assets.ScriptableObjects
 {
-    public class RandomDataGenerator : IWorldGen
+    [CreateAssetMenu(fileName = "RandomGeneration", menuName = "Algorithms/RandomGeneration")]
+    public class RandomGenerationAlgorithm : AlgorithmBase
     {
-        public void Apply(TilemapStructure tilemap)
+        public override void Apply(TilemapStructure tilemap)
         {
             var validEnumValues = (GroundTileType[])Enum.GetValues(typeof(GroundTileType));
             for (int x = 0; x < tilemap.Width; x++)

@@ -1,4 +1,5 @@
-﻿using Assets.Tilemaps;
+﻿using Assets.ScriptableObjects;
+using Assets.Tilemaps;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,9 @@ namespace Assets.Tilemaps
             public GroundTileType GroundTile;
             public Color Color;
         }
+
+        [SerializeField]
+        private AlgorithmBase[] _algorithms;
 
         [SerializeField]
         private TileType[] TileTypes;
@@ -56,8 +60,11 @@ namespace Assets.Tilemaps
                 _tileTypeDictionary.Add((int)tiletype.GroundTile, tile);
             }
 
-            // Generate random data
-            Generate(new RandomDataGenerator());
+            // Apply all the algorithms to the tilemap
+            foreach (var algorithm in _algorithms)
+            {
+                Generate(algorithm);
+            }
 
             // Render our data
             RenderAllTiles();
@@ -116,9 +123,9 @@ namespace Assets.Tilemaps
             return x >= 0 && x < Width && y >= 0 && y < Height;
         }
 
-        public void Generate(IWorldGen generator)
+        public void Generate(AlgorithmBase algorithm)
         {
-            generator.Apply(this);
+            algorithm.Apply(this);
         }
     }
 }
