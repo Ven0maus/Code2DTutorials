@@ -1,5 +1,4 @@
 ﻿using Assets.ScriptableObjects;
-using Assets.Tilemaps;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +8,7 @@ namespace Assets.Tilemaps
 {
     public class TilemapStructure : MonoBehaviour
     {
-        public int Width, Height, TileSize;
+        public int Width, Height, TileSize, Seed;
         private int[] _tiles;
         private Tilemap _graphicMap;
 

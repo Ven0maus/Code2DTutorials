@@ -378,11 +378,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f98f6bb32581746aa991c254ff3c89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 25
-  Height: 25
+  Width: 100
+  Height: 100
   TileSize: 16
+  Seed: 0
   _algorithms:
-  - {fileID: 11400000, guid: cfefacc97336002458e179ddf8c22800, type: 2}
+  - {fileID: 11400000, guid: 9d9b920a499b3544e9b459285988c3a3, type: 2}
   TileTypes:
   - GroundTile: 0
     Color: {r: 0, g: 0.023826122, b: 1, a: 1}
