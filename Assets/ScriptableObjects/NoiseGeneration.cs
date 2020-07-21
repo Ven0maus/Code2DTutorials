@@ -17,6 +17,7 @@ namespace Assets.ScriptableObjects
         public float Lacunarity;
         public float NoiseScale;
         public Vector2 Offset;
+        public bool ApplyIslandGradient;
 
         [Serializable]
         class NoiseValues
@@ -36,6 +37,22 @@ namespace Assets.ScriptableObjects
 
             // Pass along our parameters to generate our noise
             var noiseMap = Noise.GenerateNoiseMap(tilemap.Width, tilemap.Height, tilemap.Seed, NoiseScale, Octaves, Persistance, Lacunarity, Offset);
+
+            if (ApplyIslandGradient)
+            {
+                var islandGradient = Noise.GenerateIslandGradientMap(tilemap.Width, tilemap.Height);
+                for (int x = 0, y; x < tilemap.Width; x++)
+                {
+                    for (y = 0; y < tilemap.Height; y++)
+                    {
+                        // Subtract the islandGradient value from the noiseMap value
+                        float subtractedValue = noiseMap[y * tilemap.Width + x] - islandGradient[y * tilemap.Width + x];
+
+                        // Apply it into the map, but make sure we clamp it between 0f and 1f
+                        noiseMap[y * tilemap.Width + x] = Mathf.Clamp01(subtractedValue);
+                    }
+                }
+            }
 
             for (int x=0; x < tilemap.Width; x++)
             {

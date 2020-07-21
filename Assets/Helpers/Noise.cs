@@ -85,5 +85,31 @@ namespace Assets.Helpers
             }
             return noiseMap;
         }
+
+        public static float[] GenerateIslandGradientMap(int mapWidth, int mapHeight)
+        {
+            float[] map = new float[mapWidth * mapHeight];
+            for (int x = 0; x < mapWidth; x++)
+            {
+                for (int y = 0; y < mapHeight; y++)
+                {
+                    // Value between 0 and 1 where * 2 - 1 makes it between -1 and 0
+                    float i = x / (float)mapWidth * 2 - 1;
+                    float j = y / (float)mapHeight * 2 - 1;
+
+                    // Find closest x or y to the edge of the map
+                    float value = Mathf.Max(Mathf.Abs(i), Mathf.Abs(j));
+
+                    // Apply a curve graph to have more values around 0 on the edge, and more values >= 3 in the middle
+                    float a = 3;
+                    float b = 2.2f;
+                    float islandGradientValue = Mathf.Pow(value, a) / (Mathf.Pow(value, a) + Mathf.Pow(b - b * value, a));
+
+                    // Apply gradient in the map
+                    map[y * mapWidth + x] = islandGradientValue;
+                }
+            }
+            return map;
+        }
     }
 }
