@@ -1,4 +1,5 @@
 ﻿using Assets.ScriptableObjects;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -90,6 +91,33 @@ namespace Assets.Tilemaps
 
             _graphicMap.SetTiles(positionsArray, tilesArray);
             _graphicMap.RefreshAllTiles();
+        }
+
+        public List<KeyValuePair<Vector2Int, int>> GetNeighbors(int tileX, int tileY)
+        {
+            int startX = tileX - 1;
+            int startY = tileY - 1;
+            int endX = tileX + 1;
+            int endY = tileY + 1;
+
+            var neighbors = new List<KeyValuePair<Vector2Int, int>>();
+            for (int x = startX; x < endX + 1; x++)
+            {
+                for (int y = startY; y < endY + 1; y++)
+                {
+                    // We don't need to add the tile we are getting the neighbors of.
+                    if (x == tileX && y == tileY) continue;
+
+                    // Check if the tile is within the tilemap, otherwise we don't need to pass it along
+                    // As it would be an invalid neighbor
+                    if (InBounds(x, y))
+                    {
+                        // Pass along a key value pair of the coordinate + the tile type
+                        neighbors.Add(new KeyValuePair<Vector2Int, int>(new Vector2Int(x, y), GetTile(x, y)));
+                    }
+                }
+            }
+            return neighbors;
         }
 
         /// <summary>

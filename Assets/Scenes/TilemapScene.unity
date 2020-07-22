@@ -172,6 +172,7 @@ MonoBehaviour:
   Grid: {fileID: 0}
   _algorithms:
   - {fileID: 11400000, guid: cfefacc97336002458e179ddf8c22800, type: 2}
+  - {fileID: 11400000, guid: 870ff742852aac74a860861069169b4a, type: 2}
 --- !u!483693784 &18916362
 TilemapRenderer:
   m_ObjectHideFlags: 0

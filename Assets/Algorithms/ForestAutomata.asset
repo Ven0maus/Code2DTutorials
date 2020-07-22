@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8a46a21ea11b8d4abe444f4afdcb33d, type: 3}
-  m_Name: TreeGeneration
+  m_Script: {fileID: 11500000, guid: 75377d4b9c65e0f4c84a36d6400cadea, type: 3}
+  m_Name: ForestAutomata
   m_EditorClassIdentifier: 
-  TreeSelection:
-  - Tree: 2001
-    SpawnOnGrounds: 04000000
-    SpawnChancePerCell: 65
+  MinAlive: 4
+  Repetitions: 6
+  ReplaceByDominantTile: 0
+  TargetTile: 2001
+  ReplacedBy: 0
