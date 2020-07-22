@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "RandomGeneration", menuName = "Algorithms/RandomGeneration")]
+    [CreateAssetMenu(fileName = "TreeGeneration", menuName = "Algorithms/TreeGeneration")]
     public class TreeGeneration : AlgorithmBase
     {
         [SerializeField]
