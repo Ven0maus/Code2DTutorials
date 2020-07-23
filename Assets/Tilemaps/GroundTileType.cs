@@ -10,6 +10,7 @@
         Grass = 4,
         Dirt = 5,
         Mountain = 6,
-        Snow = 7
+        Snow = 7,
+        River = 8
     }
 }

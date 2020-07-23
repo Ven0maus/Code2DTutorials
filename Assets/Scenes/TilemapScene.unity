@@ -399,10 +399,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb3beaab6e7f6d54199ae50896283303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 100
-  Height: 100
+  Width: 200
+  Height: 200
   TileSize: 16
-  Seed: 0
+  Seed: 12354
   GroundTileTypes:
   - TileType: 1
     Texture: {fileID: 0}
@@ -415,7 +415,7 @@ MonoBehaviour:
     Color: {r: 0.7830189, g: 0.70819783, b: 0.43952474, a: 0}
   - TileType: 4
     Texture: {fileID: 0}
-    Color: {r: 0.30215383, g: 0.6603774, b: 0.36995882, a: 0}
+    Color: {r: 0.2018512, g: 0.5283019, b: 0.2628365, a: 0}
   - TileType: 5
     Texture: {fileID: 0}
     Color: {r: 0.3679245, g: 0.2932983, b: 0.2932983, a: 0}
@@ -425,6 +425,9 @@ MonoBehaviour:
   - TileType: 7
     Texture: {fileID: 0}
     Color: {r: 1, g: 1, b: 1, a: 0}
+  - TileType: 8
+    Texture: {fileID: 0}
+    Color: {r: 0, g: 0.6482525, b: 1, a: 0}
   ObjectTileTypes:
   - TileType: 2001
     Texture: {fileID: 2800000, guid: d546437f2cb00a949bcc5000092f290a, type: 3}
@@ -565,3 +568,4 @@ MonoBehaviour:
   Grid: {fileID: 0}
   _algorithms:
   - {fileID: 11400000, guid: 9d9b920a499b3544e9b459285988c3a3, type: 2}
+  - {fileID: 11400000, guid: 4f13413c9f4f12347b0162b2160aaa0a, type: 2}

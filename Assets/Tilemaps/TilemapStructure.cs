@@ -120,6 +120,28 @@ namespace Assets.Tilemaps
             return neighbors;
         }
 
+        public List<KeyValuePair<Vector2Int, int>> Get4Neighbors(int tileX, int tileY)
+        {
+            int startX = tileX - 1;
+            int startY = tileY - 1;
+            int endX = tileX + 1;
+            int endY = tileY + 1;
+
+            var neighbors = new List<KeyValuePair<Vector2Int, int>>();
+            for (int x = startX; x < endX + 1; x++)
+            {
+                if (x == tileX || !InBounds(x, tileY)) continue;
+                neighbors.Add(new KeyValuePair<Vector2Int, int>(new Vector2Int(x, tileY), GetTile(x, tileY)));
+            }
+            for (int y = startY; y < endY + 1; y++)
+            {
+                if (y == tileY || !InBounds(tileX, y)) continue;
+                neighbors.Add(new KeyValuePair<Vector2Int, int>(new Vector2Int(tileX, y), GetTile(tileX, y)));
+            }
+
+            return neighbors;
+        }
+
         /// <summary>
         /// Return type of tile, otherwise 0 if invalid position.
         /// </summary>
