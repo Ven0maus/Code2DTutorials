@@ -17,6 +17,7 @@ namespace Assets.Tilemaps
             public GroundTileType TileType;
             public Texture2D Texture;
             public Color Color;
+            public Tile Tile;
         }
 
         [Serializable]
@@ -25,6 +26,7 @@ namespace Assets.Tilemaps
             public ObjectTileType TileType;
             public Texture2D Texture;
             public Color Color;
+            public Tile Tile;
         }
 
         [SerializeField]
@@ -59,29 +61,31 @@ namespace Assets.Tilemaps
             }
         }
 
-        private Dictionary<int, Tile> InitializeTiles() 
+        private Dictionary<int, Tile> InitializeTiles()
         {
             var dictionary = new Dictionary<int, Tile>();
 
-            // Create a Tile for each GroundTileType
             foreach (var tiletype in GroundTileTypes)
             {
-                // Don't make a tile for empty
                 if (tiletype.TileType == 0) continue;
-                // Create tile scriptable object
-                var tile = CreateTile(tiletype.Color, tiletype.Texture);
-                // Add to dictionary by key int value, value Tile
+
+                // If we have a custom tile, use it otherwise create a new tile
+                var tile = tiletype.Tile == null ?
+                    CreateTile(tiletype.Color, tiletype.Texture) :
+                    tiletype.Tile;
+
                 dictionary.Add((int)tiletype.TileType, tile);
             }
 
-            // Create a Tile for each ObjectTileType
             foreach (var tiletype in ObjectTileTypes)
             {
-                // Don't make a tile for empty
                 if (tiletype.TileType == 0) continue;
-                // Create tile scriptable object
-                var tile = CreateTile(tiletype.Color, tiletype.Texture);
-                // Add to dictionary by key int value, value Tile
+
+                // If we have a custom tile, use it otherwise create a new tile
+                var tile = tiletype.Tile == null ?
+                    CreateTile(tiletype.Color, tiletype.Texture) :
+                    tiletype.Tile;
+
                 dictionary.Add((int)tiletype.TileType, tile);
             }
 
