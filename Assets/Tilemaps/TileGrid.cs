@@ -12,21 +12,23 @@ namespace Assets.Tilemaps
         public Dictionary<int, Tile> Tiles { get; private set; }
 
         [Serializable]
-        class GroundTiles
+        class GroundTiles : ITileData
         {
             public GroundTileType TileType;
-            public Texture2D Texture;
-            public Color Color;
-            public Tile Tile;
         }
 
         [Serializable]
-        class ObjectTiles
+        class ObjectTiles : ITileData
         {
             public ObjectTileType TileType;
-            public Texture2D Texture;
+        }
+
+        class ITileData
+        {
+            public Sprite Sprite;
             public Color Color;
             public Tile Tile;
+            public Tile.ColliderType ColliderType;
         }
 
         [SerializeField]
@@ -71,7 +73,7 @@ namespace Assets.Tilemaps
 
                 // If we have a custom tile, use it otherwise create a new tile
                 var tile = tiletype.Tile == null ?
-                    CreateTile(tiletype.Color, tiletype.Texture) :
+                    CreateTile(tiletype.Color, tiletype.Sprite, tiletype.ColliderType) :
                     tiletype.Tile;
 
                 dictionary.Add((int)tiletype.TileType, tile);
@@ -83,7 +85,7 @@ namespace Assets.Tilemaps
 
                 // If we have a custom tile, use it otherwise create a new tile
                 var tile = tiletype.Tile == null ?
-                    CreateTile(tiletype.Color, tiletype.Texture) :
+                    CreateTile(tiletype.Color, tiletype.Sprite, tiletype.ColliderType) :
                     tiletype.Tile;
 
                 dictionary.Add((int)tiletype.TileType, tile);
@@ -92,23 +94,23 @@ namespace Assets.Tilemaps
             return dictionary;
         }
 
-        private Tile CreateTile(Color color, Texture2D texture)
+        private Tile CreateTile(Color color, Sprite sprite, Tile.ColliderType colliderType)
         {
-            // If we haven't specified one, we just create an empty one for the color instead
+            // No sprite specified, we create one for the color instead
             bool setColor = false;
+            Texture2D texture = sprite == null ? null : sprite.texture;
             if (texture == null)
             {
                 setColor = true;
-                texture = new Texture2D(TileSize, TileSize);
+                // Created sprites do not support custom physics shape
+                texture = new Texture2D(TileSize, TileSize)
+                {
+                    filterMode = FilterMode.Point
+                };
+                sprite = Sprite.Create(texture, new Rect(0, 0, TileSize, TileSize), new Vector2(0.5f, 0.5f), TileSize);
             }
 
-            // We should be using Point mode, to get the most quality out of our tiles
-            texture.filterMode = FilterMode.Point;
-
-            // Create our sprite with the texture passed along
-            var sprite = Sprite.Create(texture, new Rect(0, 0, TileSize, TileSize), new Vector2(0.5f, 0.5f), TileSize);
-
-            // Create a scriptable object instance of type Tile (inherits from TileBase)
+            // Create an instance of type Tile (inherits from TileBase)
             var tile = ScriptableObject.CreateInstance<Tile>();
 
             if (setColor)
@@ -119,7 +121,9 @@ namespace Assets.Tilemaps
                 tile.color = color;
             }
 
-            // Assign the sprite we created earlier to our tiles
+            // Make sure the collider type is Sprite to use
+            // Custom physics shape for collider shape
+            tile.colliderType = colliderType;
             tile.sprite = sprite;
 
             return tile;
