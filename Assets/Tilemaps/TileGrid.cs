@@ -12,18 +12,18 @@ namespace Assets.Tilemaps
         public Dictionary<int, Tile> Tiles { get; private set; }
 
         [Serializable]
-        class GroundTiles : ITileData
+        class GroundTiles : TileData
         {
             public GroundTileType TileType;
         }
 
         [Serializable]
-        class ObjectTiles : ITileData
+        class ObjectTiles : TileData
         {
             public ObjectTileType TileType;
         }
 
-        class ITileData
+        class TileData
         {
             public Sprite Sprite;
             public Color Color;
