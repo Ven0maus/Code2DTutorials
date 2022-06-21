@@ -7,16 +7,16 @@ namespace Assets.Player
     {
         [SerializeField]
         private TileGrid _grid;
+        [SerializeField]
         private Rigidbody2D _rigidbody;
-        private TilemapStructure _groundMap;
-
         [SerializeField]
         private float _speed = 4f;
+
+        private TilemapStructure _groundMap;
 
         // Start is called before the first frame update
         private void Start()
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
             _groundMap = _grid.GetTilemap(TilemapType.Ground);
         }
 
@@ -39,10 +39,11 @@ namespace Assets.Player
             // Grab the player position, floor the float to an int
             // We should floor, because rounding means that if we stand in the upper right corner of the tile
             // It will already give us the coordinates of the next tile which is incorrect since we're still standing on the previous tile
-            var playerPositionXY = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
+            var xPos = Mathf.FloorToInt(transform.position.x);
+            var yPos = Mathf.FloorToInt(transform.position.y);
 
             // Set the tile to snow, there is a InBounds check in this method, and it won't trigger map updates if the type doesn't change
-            _groundMap.SetTile(playerPositionXY.x, playerPositionXY.y, (int)GroundTileType.Snow, true);
+            _groundMap.SetTile(xPos, yPos, (int)GroundTileType.Snow, true);
         }
     }
 }
