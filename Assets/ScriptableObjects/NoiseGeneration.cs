@@ -67,7 +67,7 @@ namespace Assets.ScriptableObjects
                         // If the height is smaller or equal then use this tiletype
                         if (height <= TileTypes[i].Height)
                         {
-                            tilemap.SetTile(x, y, (int)TileTypes[i].GroundTile);
+                            tilemap.SetTile(x, y, (int)TileTypes[i].GroundTile, setDirty: false);
                             break;
                         }
                     }

@@ -22,7 +22,7 @@ namespace Assets.ScriptableObjects
 
         public override void Apply(TilemapStructure tilemap)
         {
-            var groundTilemap = tilemap.Grid.Tilemaps[TilemapType.Ground];
+            var groundTilemap = tilemap.Grid.GetTilemap(TilemapType.Ground);
             var random = new System.Random(tilemap.Grid.Seed);
             for (int x = 0; x < tilemap.Width; x++)
             {
@@ -36,7 +36,7 @@ namespace Assets.ScriptableObjects
                             // Do a random chance check
                             if (random.Next(0, 100) <= tree.SpawnChancePerCell)
                             {
-                                tilemap.SetTile(x, y, (int)tree.Tree);
+                                tilemap.SetTile(x, y, (int)tree.Tree, setDirty: false);
                             }
 
                             // We don't break here, because other tree selections can still overrule this one.
