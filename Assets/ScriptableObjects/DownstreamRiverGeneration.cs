@@ -62,7 +62,7 @@ namespace Assets.ScriptableObjects
             int riverTileId = (int)GroundTileType.River;
             foreach (var riverPosition in rivers.SelectMany(a => a.RiverPositions))
             {
-                tilemap.SetTile(riverPosition.x, riverPosition.y, riverTileId);
+                tilemap.SetTile(riverPosition.x, riverPosition.y, riverTileId, setDirty: false);
             }
         }
 

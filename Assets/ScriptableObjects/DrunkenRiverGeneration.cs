@@ -49,7 +49,7 @@ namespace Assets.ScriptableObjects
             int riverTileId = (int)GroundTileType.River;
             foreach (var riverPosition in rivers.SelectMany(a => a.RiverPositions))
             {
-                tilemap.SetTile(riverPosition.x, riverPosition.y, riverTileId);
+                tilemap.SetTile(riverPosition.x, riverPosition.y, riverTileId, setDirty: false);
             }
         }
         private Vector2Int? GetValidStartPosition(List<Vector2Int> startPositions, List<DrunkenRiver> rivers)
