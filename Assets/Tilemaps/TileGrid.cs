@@ -73,8 +73,9 @@ namespace Assets.Tilemaps
 
                 // If we have a custom tile, use it otherwise create a new tile
                 var tile = tiletype.Tile == null ?
-                    CreateTile(tiletype.Color, tiletype.Sprite, tiletype.ColliderType) :
+                    CreateTile(tiletype.Color, tiletype.Sprite) :
                     tiletype.Tile;
+                tile.colliderType = tiletype.ColliderType;
 
                 dictionary.Add((int)tiletype.TileType, tile);
             }
@@ -85,8 +86,9 @@ namespace Assets.Tilemaps
 
                 // If we have a custom tile, use it otherwise create a new tile
                 var tile = tiletype.Tile == null ?
-                    CreateTile(tiletype.Color, tiletype.Sprite, tiletype.ColliderType) :
+                    CreateTile(tiletype.Color, tiletype.Sprite) :
                     tiletype.Tile;
+                tile.colliderType = tiletype.ColliderType;
 
                 dictionary.Add((int)tiletype.TileType, tile);
             }
@@ -94,7 +96,7 @@ namespace Assets.Tilemaps
             return dictionary;
         }
 
-        private Tile CreateTile(Color color, Sprite sprite, Tile.ColliderType colliderType)
+        private Tile CreateTile(Color color, Sprite sprite)
         {
             // No sprite specified, we create one for the color instead
             bool setColor = false;
@@ -123,7 +125,6 @@ namespace Assets.Tilemaps
 
             // Make sure the collider type is Sprite to use
             // Custom physics shape for collider shape
-            tile.colliderType = colliderType;
             tile.sprite = sprite;
 
             return tile;
