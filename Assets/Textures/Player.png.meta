@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d546437f2cb00a949bcc5000092f290a
+guid: deff0c2cd62a1904e9b54860239536d4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: 0
@@ -88,10 +88,26 @@ TextureImporter:
     sprites: []
     outline: []
     physicsShape:
-    - - {x: -5, y: 8}
-      - {x: -5, y: -8}
-      - {x: 5, y: -8}
-      - {x: 5, y: 8}
+    - - {x: -2, y: 6}
+      - {x: -2, y: 1}
+      - {x: -4, y: 1}
+      - {x: -4, y: -4}
+      - {x: -2, y: -4}
+      - {x: -2, y: -7}
+      - {x: -3, y: -7}
+      - {x: -3, y: -8}
+      - {x: 4, y: -8}
+      - {x: 4, y: -7}
+      - {x: 3, y: -7}
+      - {x: 3, y: -4}
+      - {x: 5, y: -4}
+      - {x: 5, y: 1}
+      - {x: 3, y: 1}
+      - {x: 3, y: 4}
+      - {x: 4, y: 4}
+      - {x: 4, y: 5}
+      - {x: 5, y: 5}
+      - {x: 5, y: 6}
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
