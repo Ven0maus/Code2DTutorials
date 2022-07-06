@@ -15,7 +15,7 @@ namespace Assets.Tilemaps
         [SerializeField]
         private TileTypes.ObjectTiles[] ObjectTileTypes;
 
-        private Dictionary<int, Tile> _tiles;
+        private Dictionary<int, TileBase> _tiles;
         private Dictionary<TilemapType, TilemapStructure> _tilemaps;
 
         private void Awake()
@@ -47,7 +47,7 @@ namespace Assets.Tilemaps
         /// Returns all the cached shared tiles available to be placed on the tilemap
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, Tile> GetTileCache()
+        public Dictionary<int, TileBase> GetTileCache()
         {
             return _tiles;
         }
@@ -67,7 +67,7 @@ namespace Assets.Tilemaps
 
         private void InitializeTiles()
         {
-            _tiles = new Dictionary<int, Tile>
+            _tiles = new Dictionary<int, TileBase>
             {
                 // Add default void tile
                 { 0, null }
@@ -84,7 +84,7 @@ namespace Assets.Tilemaps
         /// <param name="dictionary"></param>
         /// <param name="tileData"></param>
         /// <exception cref="Exception"></exception>
-        private void AddTileSet(Dictionary<int, Tile> tiles, TileTypes.TileData[] tileData)
+        private void AddTileSet(Dictionary<int, TileBase> tiles, TileTypes.TileData[] tileData)
         {
             foreach (var tiletype in tileData)
             {
@@ -94,7 +94,14 @@ namespace Assets.Tilemaps
                 var tile = tiletype.Tile == null ?
                     CreateTile(tiletype.Color, tiletype.Sprite) :
                     tiletype.Tile;
-                tile.colliderType = tiletype.ColliderType;
+
+                // Set collider type if it's available
+                var tileType = tile.GetType();
+                var prop = tileType.GetProperty("colliderType");
+                if (prop != null)
+                {
+                    prop.SetValue(tile, tiletype.ColliderType);
+                }
                 
                 // Check if the tile id already exists in the tiles
                 if (tiles.ContainsKey(tiletype.TileTypeId))

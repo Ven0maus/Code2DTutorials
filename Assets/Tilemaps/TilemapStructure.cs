@@ -81,7 +81,7 @@ namespace Assets.Tilemaps
 
             var typeOfTile = GetTile(x, y);
             // Get the ScriptableObject that matches this type and insert it
-            Grid.GetTileCache().TryGetValue(typeOfTile, out Tile tile); // Default return null if not found
+            Grid.GetTileCache().TryGetValue(typeOfTile, out TileBase tile); // Default return null if not found
             _graphicMap.SetTile(new Vector3Int(x, y, 0), tile);
             _graphicMap.RefreshTile(new Vector3Int(x, y, 0));
         }
@@ -93,12 +93,12 @@ namespace Assets.Tilemaps
         public void UpdateTiles(Vector2Int[] positions)
         {
             var positionsArray = new Vector3Int[positions.Length];
-            var tilesArray = new Tile[positions.Length];
+            var tilesArray = new TileBase[positions.Length];
             for (int i=0; i < positions.Length; i++)
             {
                 var typeOfTile = GetTile(positions[i].x, positions[i].y);
                 // Get the ScriptableObject that matches this type and insert it
-                Grid.GetTileCache().TryGetValue(typeOfTile, out Tile tile); // Default return null if not found
+                Grid.GetTileCache().TryGetValue(typeOfTile, out TileBase tile); // Default return null if not found
                 positionsArray[i] = new Vector3Int(positions[i].x, positions[i].y, 0);
                 tilesArray[i] = tile;
 
@@ -120,7 +120,7 @@ namespace Assets.Tilemaps
         {
             // Create a positions array and tile array required by _graphicMap.SetTiles
             var positionsArray = new Vector3Int[Width * Height];
-            var tilesArray = new Tile[Width * Height];
+            var tilesArray = new TileBase[Width * Height];
 
             // Loop over all our tiles in our data structure
             for (int x = 0; x < Width; x++)
@@ -131,7 +131,7 @@ namespace Assets.Tilemaps
                     // Get what tile is at this position
                     var typeOfTile = GetTile(x, y);
                     // Get the ScriptableObject that matches this type and insert it
-                    Grid.GetTileCache().TryGetValue(typeOfTile, out Tile tile); // Default return null if not found
+                    Grid.GetTileCache().TryGetValue(typeOfTile, out TileBase tile); // Default return null if not found
                     tilesArray[x * Width + y] = tile;
                 }
             }

@@ -25,7 +25,7 @@ namespace Assets.Tilemaps
         {
             public Sprite Sprite;
             public Color Color;
-            public Tile Tile;
+            public TileBase Tile;
             public Tile.ColliderType ColliderType;
             public virtual int TileTypeId { get; }
         }
