@@ -1,5 +1,6 @@
 ﻿using SadConsole;
 using SadRogue.Primitives;
+using System;
 
 namespace Roguelike.Screens
 {
@@ -8,12 +9,19 @@ namespace Roguelike.Screens
     /// </summary>
     internal class ScreenContainer : ScreenObject
     {
-        public ScreenSurface World { get; set; }
-        public ScreenSurface PlayerStats { get; set; }
-        public ScreenSurface Messages { get; set; }
+        public ScreenSurface World { get; }
+        public ScreenSurface PlayerStats { get; }
+        public ScreenSurface Messages { get; }
+
+        private static ScreenContainer _instance;
+        public static ScreenContainer Instance => _instance ?? throw new Exception("ScreenContainer is not yet initialized.");
 
         public ScreenContainer()
         {
+            if (_instance != null)
+                throw new Exception("Only one ScreenContainer instance can exist.");
+            _instance = this;
+
             // World screen
             World = new ScreenSurface(Game.Instance.ScreenCellsX.Percent(70), Game.Instance.ScreenCellsY);
             Children.Add(World);
