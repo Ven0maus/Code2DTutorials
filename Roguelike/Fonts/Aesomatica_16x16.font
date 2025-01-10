@@ -3,7 +3,7 @@
     "Name": "Aesomatica_16x16",
     "FilePath": "Aesomatica_16x16.png",
     "GlyphHeight": 16,
-    "GlyphPadding": 1,
+    "GlyphPadding": 0,
     "GlyphWidth": 16,
     "SolidGlyphIndex": 219,
     "Columns": 16
