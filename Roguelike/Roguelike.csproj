@@ -12,4 +12,13 @@
     <PackageReference Include="SadConsole.Host.MonoGame" Version="10.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Fonts\Aesomatica_16x16.font">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\Aesomatica_16x16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

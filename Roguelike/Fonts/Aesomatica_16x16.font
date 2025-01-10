@@ -1,0 +1,10 @@
+{
+    "$type": "SadConsole.SadFont, SadConsole",
+    "Name": "Aesomatica_16x16",
+    "FilePath": "Aesomatica_16x16.png",
+    "GlyphHeight": 16,
+    "GlyphPadding": 1,
+    "GlyphWidth": 16,
+    "SolidGlyphIndex": 219,
+    "Columns": 16
+}
