@@ -13,7 +13,7 @@ namespace Roguelike
         private static void Main()
         {
             Settings.WindowTitle = Constants.GameTitle;
-            Settings.ResizeMode = Settings.WindowResizeOptions.Fit;
+            Settings.ResizeMode = Settings.WindowResizeOptions.Scale;
 
             Builder configuration = new();
 
