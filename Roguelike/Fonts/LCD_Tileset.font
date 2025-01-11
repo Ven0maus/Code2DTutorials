@@ -1,7 +1,7 @@
 {
     "$type": "SadConsole.SadFont, SadConsole",
-    "Name": "Aesomatica_16x16",
-    "FilePath": "Aesomatica_16x16.png",
+    "Name": "LCD_Tileset",
+    "FilePath": "LCD_Tileset.png",
     "GlyphHeight": 16,
     "GlyphPadding": 0,
     "GlyphWidth": 16,

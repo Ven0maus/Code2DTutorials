@@ -13,11 +13,12 @@ namespace Roguelike
         private static void Main()
         {
             Settings.WindowTitle = Constants.GameTitle;
-            Settings.ResizeMode = Settings.WindowResizeOptions.Scale;
+            Settings.ResizeMode = Settings.WindowResizeOptions.Stretch;
 
             Builder configuration = new();
 
-            configuration = configuration
+            _ = configuration
+                .SetScreenSize(60, 40)
                 .SetStartingScreen<ScreenContainer>()
                 .IsStartingScreenFocused(true)
                 .ConfigureFonts((f, gh) =>
@@ -29,17 +30,23 @@ namespace Roguelike
                     // We do it in ConfigureFonts because here the GameHost.Instance property is not null, which is needed for the serializer.
                     var (width, height) = DefineScreenSizeByResolution();
                     configuration.SetScreenSize(width, height);
-                });
+                })
+                .OnStart(GameStart);
 
             Game.Create(configuration);
             Game.Instance.Run();
             Game.Instance.Dispose();
         }
 
+        private static void GameStart(object sender, GameHost e)
+        {
+            ScreenContainer.Instance.World.Generate();
+        }
+
         private static (int width, int height) DefineScreenSizeByResolution()
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
-            var font = Serializer.Load<IFont>(Constants.Font, false, settings);
+            using var font = Serializer.Load<IFont>(Constants.Font, false, settings);
             return (Constants.Resolution.width / font.GlyphWidth, Constants.Resolution.height / font.GlyphHeight);
         }
     }

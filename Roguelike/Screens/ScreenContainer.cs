@@ -9,12 +9,14 @@ namespace Roguelike.Screens
     /// </summary>
     internal class ScreenContainer : ScreenObject
     {
-        public ScreenSurface World { get; }
+        private static ScreenContainer _instance;
+        public static ScreenContainer Instance => _instance ?? throw new Exception("ScreenContainer is not yet initialized.");
+
+        public WorldScreen World { get; }
         public ScreenSurface PlayerStats { get; }
         public ScreenSurface Messages { get; }
 
-        private static ScreenContainer _instance;
-        public static ScreenContainer Instance => _instance ?? throw new Exception("ScreenContainer is not yet initialized.");
+        public Random Random { get; }
 
         public ScreenContainer()
         {
@@ -22,26 +24,27 @@ namespace Roguelike.Screens
                 throw new Exception("Only one ScreenContainer instance can exist.");
             _instance = this;
 
+            Random = new Random();
+
             // World screen
-            World = new ScreenSurface(Game.Instance.ScreenCellsX.Percent(70), Game.Instance.ScreenCellsY);
+            World = new WorldScreen(Game.Instance.ScreenCellsX.PercentageOf(70), Game.Instance.ScreenCellsY);
             Children.Add(World);
 
             // Player stats screen
-            PlayerStats = new ScreenSurface(Game.Instance.ScreenCellsX.Percent(30), Game.Instance.ScreenCellsY.Percent(60))
+            PlayerStats = new ScreenSurface(Game.Instance.ScreenCellsX.PercentageOf(30), Game.Instance.ScreenCellsY.PercentageOf(60))
             {
                 Position = new Point(World.Position.X + World.Width, World.Position.Y)
             };
             Children.Add(PlayerStats);
 
             // Messages screen
-            Messages = new ScreenSurface(Game.Instance.ScreenCellsX.Percent(30), Game.Instance.ScreenCellsY.Percent(40))
+            Messages = new ScreenSurface(Game.Instance.ScreenCellsX.PercentageOf(30), Game.Instance.ScreenCellsY.PercentageOf(40))
             {
                 Position = new Point(World.Position.X + World.Width, PlayerStats.Position.Y + PlayerStats.Height)
             };
             Children.Add(Messages);
 
             // Temporary for visualization of the surfaces
-            World.Fill(background: Color.Blue);
             PlayerStats.Fill(background: Color.Green);
             Messages.Fill(background: Color.Yellow);
         }
