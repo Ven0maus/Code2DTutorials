@@ -1,0 +1,30 @@
+﻿[
+  {
+    "Type": "None",
+    "Obstruction": "FullyBlocked",
+    "Foreground": "#00000000",
+    "Background": "#00000000",
+    "Glyph": 0
+  },
+  {
+    "Type": "Floor",
+    "Obstruction": "Open",
+    "Foreground": "#808080",
+    "Background": "#00000000",
+    "Glyph": "."
+  },
+  {
+    "Type": "Wall",
+    "Obstruction": "FullyBlocked",
+    "Foreground": "#f4a460",
+    "Background": "#00000000",
+    "Glyph": "#"
+  },
+  {
+    "Type": "Door",
+    "Obstruction": "VisionBlocked",
+    "Foreground": "#ff4500",
+    "Background": "#00000000",
+    "Glyph": "+"
+  }
+]

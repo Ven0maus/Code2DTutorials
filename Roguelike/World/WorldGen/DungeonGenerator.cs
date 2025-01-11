@@ -41,7 +41,6 @@ namespace Roguelike.World.WorldGen
                 }
             }
 
-
             // Connect rooms with tunnels
             for (int i = 1; i < rooms.Count; i++)
             {
@@ -61,10 +60,8 @@ namespace Roguelike.World.WorldGen
             {
                 for (int y = room.Y; y < room.Y + room.Height; y++)
                 {
-                    // Set floor tile and make obstruction open
-                    tilemap[x, y].Glyph = '.';
-                    tilemap[x, y].Foreground = Color.Gray;
-                    tilemap[x, y].Obstruction = ObstructionType.Open;
+                    // Set floor tile
+                    tilemap[x, y].Type = TileType.Floor;
                 }
             }
         }
@@ -75,21 +72,15 @@ namespace Roguelike.World.WorldGen
 
             while (current.X != end.X)
             {
-                // Set floor tile and make obstruction open
-                tilemap[current.X, current.Y].Glyph = '.';
-                tilemap[current.X, current.Y].Foreground = Color.Gray;
-                tilemap[current.X, current.Y].Obstruction = ObstructionType.Open;
-
+                // Set floor tile
+                tilemap[current.X, current.Y].Type = TileType.Floor;
                 current = new Point(current.X + (current.X < end.X ? 1 : -1), current.Y);
             }
 
             while (current.Y != end.Y)
             {
-                // Set floor tile and make obstruction open
-                tilemap[current.X, current.Y].Glyph = '.'; // Set floor tile
-                tilemap[current.X, current.Y].Foreground = Color.Gray;
-                tilemap[current.X, current.Y].Obstruction = ObstructionType.Open;
-
+                // Set floor tile
+                tilemap[current.X, current.Y].Type = TileType.Floor;
                 current = new Point(current.X, current.Y + (current.Y < end.Y ? 1 : -1));
             }
         }
@@ -101,19 +92,17 @@ namespace Roguelike.World.WorldGen
                 for (int y = 0; y < tilemap.Height; y++)
                 {
                     // Check if the current tile is a floor
-                    if (tilemap[x, y].Glyph == '.')
+                    if (tilemap[x, y].Type == TileType.Floor)
                     {
                         // Get neighbors of the current tile
                         var neighbors = new Point(x, y).GetNeighborPoints(true);
                         foreach (var neighbor in neighbors)
                         {
                             // If a neighbor is inbounds and not a floor, set it as a wall
-                            if (tilemap.InBounds(neighbor.X, neighbor.Y) && tilemap[neighbor.X, neighbor.Y].Glyph != '.')
+                            if (tilemap.InBounds(neighbor.X, neighbor.Y) && tilemap[neighbor.X, neighbor.Y].Type != TileType.Floor)
                             {
                                 // Set wall glyph and make obstruction fully blocked
-                                tilemap[neighbor.X, neighbor.Y].Glyph = '#';
-                                tilemap[neighbor.X, neighbor.Y].Foreground = Color.SandyBrown;
-                                tilemap[neighbor.X, neighbor.Y].Obstruction = ObstructionType.FullyBlocked;
+                                tilemap[neighbor.X, neighbor.Y].Type = TileType.Wall;
                             }
                         }
                     }
@@ -133,7 +122,7 @@ namespace Roguelike.World.WorldGen
                     if (!tilemap.InBounds(position.X, position.Y)) continue;
 
                     // If tile is a floor
-                    if (tilemap[position.X, position.Y].Glyph == '.')
+                    if (tilemap[position.X, position.Y].Type == TileType.Floor)
                     {
                         // Get directional neighbors
                         var north = tilemap[position.X, position.Y + 1, false];
@@ -141,15 +130,13 @@ namespace Roguelike.World.WorldGen
                         var east = tilemap[position.X + 1, position.Y, false];
                         var west = tilemap[position.X - 1, position.Y, false];
 
-                        if ((north?.Glyph == '.' && south?.Glyph == '.' && east?.Glyph == '#' && west?.Glyph == '#') ||
-                            (north?.Glyph == '#' && south?.Glyph == '#' && east?.Glyph == '.' && west?.Glyph == '.'))
+                        if ((north?.Type == TileType.Floor && south?.Type == TileType.Floor && east?.Type == TileType.Wall && west?.Type == TileType.Wall) ||
+                            (north?.Type == TileType.Wall && south?.Type == TileType.Wall && east?.Type == TileType.Floor && west?.Type == TileType.Floor))
                         {
                             // % chance to place a door
                             if (ScreenContainer.Instance.Random.Next(100) < ChanceForDoorPlacement)
                             {
-                                tilemap[position.X, position.Y].Glyph = '+';
-                                tilemap[position.X, position.Y].Foreground = Color.OrangeRed;
-                                tilemap[position.X, position.Y].Obstruction = ObstructionType.VisionBlocked;
+                                tilemap[position.X, position.Y].Type = TileType.Door;
                             }
                         }
                     }
