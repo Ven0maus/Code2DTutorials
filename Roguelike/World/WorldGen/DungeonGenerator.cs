@@ -17,6 +17,8 @@ namespace Roguelike.World.WorldGen
             var random = ScreenContainer.Instance.Random;
             rooms = [];
 
+            const int borderSize = 2;
+
             // Generate rooms
             for (int attempts = 0; attempts < MaxAttempts; attempts++)
             {
@@ -26,8 +28,8 @@ namespace Roguelike.World.WorldGen
                 int height = random.Next(minRoomSize, maxRoomSize);
 
                 // Exclude border tiles so we can set walls properly + keep an empty space as the border
-                int x = random.Next(2, tilemap.Width - width - 2);
-                int y = random.Next(2, tilemap.Height - height - 2);
+                int x = random.Next(borderSize, tilemap.Width - width - borderSize);
+                int y = random.Next(borderSize, tilemap.Height - height - borderSize);
 
                 Rectangle newRoom = new(x, y, width, height);
 
@@ -39,16 +41,14 @@ namespace Roguelike.World.WorldGen
                 }
             }
 
+
             // Connect rooms with tunnels
             for (int i = 1; i < rooms.Count; i++)
             {
                 Rectangle roomA = rooms[i - 1];
                 Rectangle roomB = rooms[i];
 
-                Point centerA = new(roomA.X + roomA.Width / 2, roomA.Y + roomA.Height / 2);
-                Point centerB = new(roomB.X + roomB.Width / 2, roomB.Y + roomB.Height / 2);
-
-                CarveTunnel(tilemap, centerA, centerB);
+                CarveTunnel(tilemap, roomA.Center, roomB.Center);
             }
 
             AddWalls(tilemap);
@@ -144,7 +144,7 @@ namespace Roguelike.World.WorldGen
                         if ((north?.Glyph == '.' && south?.Glyph == '.' && east?.Glyph == '#' && west?.Glyph == '#') ||
                             (north?.Glyph == '#' && south?.Glyph == '#' && east?.Glyph == '.' && west?.Glyph == '.'))
                         {
-                            // 60% chance to place a door
+                            // % chance to place a door
                             if (ScreenContainer.Instance.Random.Next(100) < ChanceForDoorPlacement)
                             {
                                 tilemap[position.X, position.Y].Glyph = '+';

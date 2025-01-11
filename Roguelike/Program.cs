@@ -2,6 +2,7 @@
 using Roguelike.Screens;
 using SadConsole;
 using SadConsole.Configuration;
+using System.Reflection.Metadata;
 
 namespace Roguelike
 {
@@ -15,6 +16,7 @@ namespace Roguelike
             Settings.WindowTitle = Constants.GameTitle;
             Settings.ResizeMode = Settings.WindowResizeOptions.Stretch;
 
+            /*
             Builder configuration = new();
 
             _ = configuration
@@ -32,8 +34,19 @@ namespace Roguelike
                     configuration.SetScreenSize(width, height);
                 })
                 .OnStart(GameStart);
+            */
 
-            Game.Create(configuration);
+            Builder gameStartup = new Builder()
+                .SetScreenSize(60, 40)
+                .SetStartingScreen<ScreenContainer>()
+                .OnStart(GameStart)
+                .IsStartingScreenFocused(true)
+                .ConfigureFonts((fontConfig, game) =>
+                {
+                    fontConfig.UseCustomFont(Constants.Font);
+                });
+
+            Game.Create(gameStartup);
             Game.Instance.Run();
             Game.Instance.Dispose();
         }
