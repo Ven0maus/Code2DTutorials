@@ -1,4 +1,5 @@
-﻿using SadConsole;
+﻿using Roguelike.Entities;
+using SadConsole;
 using SadRogue.Primitives;
 using System;
 

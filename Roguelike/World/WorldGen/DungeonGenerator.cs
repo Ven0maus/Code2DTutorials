@@ -10,12 +10,13 @@ namespace Roguelike.World.WorldGen
         private const int MaxAttempts = 100;
         private const int ChanceForDoorPlacement = 60;
 
-        public static void Generate(Tilemap tilemap, int maxRooms, int minRoomSize, int maxRoomSize, out List<Rectangle> rooms)
+        public static void Generate(Tilemap tilemap, int maxRooms, int minRoomSize, int maxRoomSize, out IReadOnlyList<Rectangle> dungeonRooms)
         {
             tilemap.Reset();
 
             var random = ScreenContainer.Instance.Random;
-            rooms = [];
+            var rooms = new List<Rectangle>();
+            dungeonRooms = rooms;
 
             const int borderSize = 2;
 

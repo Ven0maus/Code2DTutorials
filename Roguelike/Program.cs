@@ -2,7 +2,6 @@
 using Roguelike.Screens;
 using SadConsole;
 using SadConsole.Configuration;
-using System.Reflection.Metadata;
 
 namespace Roguelike
 {
@@ -54,6 +53,7 @@ namespace Roguelike
         private static void GameStart(object sender, GameHost e)
         {
             ScreenContainer.Instance.World.Generate();
+            ScreenContainer.Instance.World.CreatePlayer();
         }
 
         private static (int width, int height) DefineScreenSizeByResolution()
