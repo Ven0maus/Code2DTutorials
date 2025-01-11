@@ -39,7 +39,7 @@ namespace Roguelike.Screens
 
         public void CreatePlayer()
         {
-            Player = new Player { Position = _dungeonRooms[0].Center };
+            Player = new Player(_dungeonRooms[0].Center);
             ActorManager.Add(Player);
         }
     }

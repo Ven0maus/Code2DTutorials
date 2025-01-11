@@ -1,14 +1,88 @@
-﻿using SadConsole.Input;
+﻿using GoRogue.FOV;
+using Roguelike.Screens;
+using Roguelike.World;
+using SadConsole.Input;
 using SadRogue.Primitives;
+using SadRogue.Primitives.GridViews;
+using System;
 using System.Collections.Generic;
 
 namespace Roguelike.Entities
 {
     internal class Player : Actor
     {
-        public Player() : base(Color.White, Color.Transparent, '@', zIndex: int.MaxValue, maxHealth: 100)
+        public IFOV FieldOfView { get; }
+
+        private int _fovRadius = Constants.PlayerFieldOfViewRadius;
+        public int FovRadius
         {
+            get => _fovRadius;
+            set
+            {
+                _fovRadius = value;
+
+                // Recalculate fov on radius change
+                FieldOfView.Calculate(Position, _fovRadius);
+            }
+        }
+
+        public Player(Point position) : base(Color.White, Color.Transparent, '@', zIndex: int.MaxValue, maxHealth: 100)
+        {
+            // Setup FOV map
+            var tilemap = ScreenContainer.Instance.World.Tilemap;
+            FieldOfView = new RecursiveShadowcastingFOV(new LambdaGridView<bool>(tilemap.Width, tilemap.Height,
+                (point) => !BlocksFov(tilemap[point.X, point.Y].Obstruction)));
+
             IsFocused = true;
+            PositionChanged += Player_PositionChanged;
+
+            if (!Move(position.X, position.Y))
+                throw new Exception($"Unable to move player to spawn position: {position}");
+        }
+
+        private void ExploreTilemap()
+        {
+            var tilemap = ScreenContainer.Instance.World.Tilemap;
+            bool wasUpdated = false;
+
+            // Seen tiles entering the FOV
+            foreach (var point in FieldOfView.NewlySeen)
+            {
+                tilemap[point.X, point.Y].IsVisible = true;
+                tilemap[point.X, point.Y].InFov = true;
+
+                if (tilemap[point.X, point.Y].IsDirty)
+                    wasUpdated = true;
+            }
+
+            // Unseen tiles leaving the FOV
+            foreach (var point in FieldOfView.NewlyUnseen)
+            {
+                tilemap[point.X, point.Y].InFov = false;
+
+                if (tilemap[point.X, point.Y].IsDirty)
+                    wasUpdated = true;
+            }
+
+            // Tell the world to re-render
+            if (wasUpdated)
+                ScreenContainer.Instance.World.Surface.IsDirty = true;
+        }
+
+        private void Player_PositionChanged(object sender, ValueChangedEventArgs<Point> e)
+        {
+            // Calculate the field of view for the player's position
+            FieldOfView.Calculate(e.NewValue, FovRadius);
+            ExploreTilemap();
+        }
+
+        private static bool BlocksFov(ObstructionType obstructionType)
+        {
+            return obstructionType switch
+            {
+                ObstructionType.VisionBlocked or ObstructionType.FullyBlocked => true,
+                _ => false,
+            };
         }
 
         private readonly Dictionary<Keys, Direction> _playerMovements = new()
