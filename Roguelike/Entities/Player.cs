@@ -6,6 +6,7 @@ using SadRogue.Primitives;
 using SadRogue.Primitives.GridViews;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Roguelike.Entities
 {
@@ -43,30 +44,21 @@ namespace Roguelike.Entities
         private void ExploreTilemap()
         {
             var tilemap = ScreenContainer.Instance.World.Tilemap;
-            bool wasUpdated = false;
 
             // Seen tiles entering the FOV
             foreach (var point in FieldOfView.NewlySeen)
             {
                 tilemap[point.X, point.Y].IsVisible = true;
                 tilemap[point.X, point.Y].InFov = true;
-
-                if (tilemap[point.X, point.Y].IsDirty)
-                    wasUpdated = true;
+                ScreenContainer.Instance.World.Surface.IsDirty = true;
             }
 
             // Unseen tiles leaving the FOV
             foreach (var point in FieldOfView.NewlyUnseen)
             {
                 tilemap[point.X, point.Y].InFov = false;
-
-                if (tilemap[point.X, point.Y].IsDirty)
-                    wasUpdated = true;
-            }
-
-            // Tell the world to re-render
-            if (wasUpdated)
                 ScreenContainer.Instance.World.Surface.IsDirty = true;
+            }
         }
 
         private void Player_PositionChanged(object sender, ValueChangedEventArgs<Point> e)
