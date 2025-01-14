@@ -1,6 +1,8 @@
-﻿using Roguelike.Screens;
+﻿using Roguelike.Entities.Actors;
+using Roguelike.Screens;
 using SadConsole.Entities;
 using SadRogue.Primitives;
+using System.Linq;
 
 namespace Roguelike.Entities
 {
@@ -8,24 +10,22 @@ namespace Roguelike.Entities
     {
         protected Actor(Color foreground, Color background, int glyph, int zIndex, int maxHealth) : base(foreground, background, glyph, zIndex)
         {
-            MaxHealth = maxHealth;
-            Health = MaxHealth;
+            Stats = new ActorStats(maxHealth);
         }
 
-        public int MaxHealth { get; set; }
-        public int Health { get; set; }
-        public bool IsAlive => Health > 0;
+        public bool IsAlive => Stats.Health > 0;
+        public ActorStats Stats { get; }
 
-        public bool Move(int x, int y)
+        public virtual bool Move(int x, int y)
         {
             var tilemap = ScreenContainer.Instance.World.Tilemap;
             var actorManager = ScreenContainer.Instance.World.ActorManager;
 
-            if (!IsAlive) return false;
-
+            if (!IsAlive || (Position.X == x && Position.Y == y)) return false;
+            
             // If the position is out of bounds, don't allow movement
             if (!tilemap.InBounds(x, y)) return false;
-
+            
             // If another actor already exists at the location, don't allow movement
             if (actorManager.ExistsAt((x, y))) return false;
 
@@ -47,6 +47,25 @@ namespace Roguelike.Entities
         {
             var position = Position + direction;
             return Move(position.X, position.Y);
+        }
+
+        public void ApplyDamage(int health)
+        {
+            Stats.Health -= health;
+
+            if (!IsAlive)
+            {
+                OnDeath();
+            }
+        }
+
+        protected virtual void OnDeath()
+        {
+            // Remove from the actor manager if it contains it
+            if (ScreenContainer.Instance.World.ActorManager.Contains(this))
+            {
+                ScreenContainer.Instance.World.ActorManager.Remove(this);
+            }
         }
     }
 }

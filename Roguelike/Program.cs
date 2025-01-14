@@ -52,8 +52,10 @@ namespace Roguelike
 
         private static void GameStart(object sender, GameHost e)
         {
-            ScreenContainer.Instance.World.Generate();
-            ScreenContainer.Instance.World.CreatePlayer();
+            var world = ScreenContainer.Instance.World;
+            world.Generate();
+            world.CreatePlayer();
+            world.CreateNpcs();
         }
 
         private static (int width, int height) DefineScreenSizeByResolution()

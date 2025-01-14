@@ -1,7 +1,11 @@
-﻿using SadConsole.Entities;
+﻿using GoRogue.FOV;
+using Roguelike.Entities.Actors;
+using Roguelike.Screens;
+using SadConsole.Entities;
 using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Roguelike.Entities
 {
@@ -52,11 +56,26 @@ namespace Roguelike.Entities
             return _actors.ContainsKey(point);
         }
 
+        public bool Contains(Actor actor)
+        {
+            return _actors.TryGetValue(actor.Position, out var actorAtPos) && actorAtPos.Equals(actor);
+        }
+
         public void Clear()
         {
             foreach (var actor in _actors.Values)
             {
                 _ = Remove(actor);
+            }
+        }
+
+        public void UpdateVisibility(IFOV fieldOfView = null)
+        {
+            var fov = fieldOfView ?? ScreenContainer.Instance.World.Player.FieldOfView;
+            var currentFov = fov.CurrentFOV.ToHashSet();
+            foreach (var actor in _actors)
+            {
+                actor.Value.IsVisible = currentFov.Contains(actor.Key);
             }
         }
 

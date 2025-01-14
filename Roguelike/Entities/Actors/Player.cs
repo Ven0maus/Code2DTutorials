@@ -1,14 +1,13 @@
 ﻿using GoRogue.FOV;
+using Roguelike.Logic;
 using Roguelike.Screens;
 using Roguelike.World;
 using SadConsole.Input;
 using SadRogue.Primitives;
 using SadRogue.Primitives.GridViews;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Roguelike.Entities
+namespace Roguelike.Entities.Actors
 {
     internal class Player : Actor
     {
@@ -29,6 +28,8 @@ namespace Roguelike.Entities
 
         public Player(Point position) : base(Color.White, Color.Transparent, '@', zIndex: int.MaxValue, maxHealth: 100)
         {
+            Name = "Player";
+
             // Setup FOV map
             var tilemap = ScreenContainer.Instance.World.Tilemap;
             FieldOfView = new RecursiveShadowcastingFOV(new LambdaGridView<bool>(tilemap.Width, tilemap.Height,
@@ -36,9 +37,7 @@ namespace Roguelike.Entities
 
             IsFocused = true;
             PositionChanged += Player_PositionChanged;
-
-            if (!Move(position.X, position.Y))
-                throw new Exception($"Unable to move player to spawn position: {position}");
+            Position = position;
         }
 
         private void ExploreTilemap()
@@ -65,6 +64,11 @@ namespace Roguelike.Entities
         {
             // Calculate the field of view for the player's position
             FieldOfView.Calculate(e.NewValue, FovRadius);
+
+            // Update the visibility of actors
+            ScreenContainer.Instance.World.ActorManager.UpdateVisibility(FieldOfView);
+
+            // Explore the dungeon tiles
             ExploreTilemap();
         }
 
@@ -99,6 +103,16 @@ namespace Roguelike.Entities
                 }
             }
             return base.ProcessKeyboard(keyboard) || moved;
+        }
+
+        public override bool Move(int x, int y)
+        {
+            var moved = base.Move(x, y);
+
+            // Execute a game logic tick on movement, even if movement failed
+            GameLogic.Tick(new Point(x, y));
+
+            return moved;
         }
     }
 }
