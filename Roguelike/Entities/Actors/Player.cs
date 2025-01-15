@@ -114,5 +114,11 @@ namespace Roguelike.Entities.Actors
 
             return moved;
         }
+
+        public override void ApplyDamage(int health)
+        {
+            base.ApplyDamage(health);
+            ScreenContainer.Instance.PlayerStats.UpdatePlayerStats();
+        }
     }
 }

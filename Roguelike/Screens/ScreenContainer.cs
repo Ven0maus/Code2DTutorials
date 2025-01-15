@@ -14,8 +14,8 @@ namespace Roguelike.Screens
         public static ScreenContainer Instance => _instance ?? throw new Exception("ScreenContainer is not yet initialized.");
 
         public WorldScreen World { get; }
-        public ScreenSurface PlayerStats { get; }
-        public ScreenSurface Messages { get; }
+        public PlayerStatsScreen PlayerStats { get; }
+        public MessagesScreen Messages { get; }
 
         public Random Random { get; }
 
@@ -28,26 +28,22 @@ namespace Roguelike.Screens
             Random = new Random();
 
             // World screen
-            World = new WorldScreen(Game.Instance.ScreenCellsX.PercentageOf(70), Game.Instance.ScreenCellsY);
+            World = new WorldScreen(Game.Instance.ScreenCellsX.PercentageOf(70), Game.Instance.ScreenCellsY.PercentageOf(70));
             Children.Add(World);
 
             // Player stats screen
-            PlayerStats = new ScreenSurface(Game.Instance.ScreenCellsX.PercentageOf(30), Game.Instance.ScreenCellsY.PercentageOf(60))
+            PlayerStats = new PlayerStatsScreen(Game.Instance.ScreenCellsX.PercentageOf(30), Game.Instance.ScreenCellsY)
             {
                 Position = new Point(World.Position.X + World.Width, World.Position.Y)
             };
             Children.Add(PlayerStats);
 
             // Messages screen
-            Messages = new ScreenSurface(Game.Instance.ScreenCellsX.PercentageOf(30), Game.Instance.ScreenCellsY.PercentageOf(40))
+            Messages = new MessagesScreen(Game.Instance.ScreenCellsX.PercentageOf(70), Game.Instance.ScreenCellsY.PercentageOf(30))
             {
-                Position = new Point(World.Position.X + World.Width, PlayerStats.Position.Y + PlayerStats.Height)
+                Position = new Point(World.Position.X, World.Height)
             };
             Children.Add(Messages);
-
-            // Temporary for visualization of the surfaces
-            PlayerStats.Fill(background: Color.Green);
-            Messages.Fill(background: Color.Yellow);
         }
     }
 }

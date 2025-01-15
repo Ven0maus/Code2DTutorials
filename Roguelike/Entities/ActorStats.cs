@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Roguelike.Entities.Actors;
+using Roguelike.Screens;
+using System;
 
 namespace Roguelike.Entities
 {
@@ -17,8 +19,11 @@ namespace Roguelike.Entities
         public int DodgeChance { get; private set; } = 0;
         public int CritChance { get; private set; } = 0;
 
-        public ActorStats(int maxHealth)
+        public Actor Parent { get; }
+
+        public ActorStats(Actor actor, int maxHealth)
         {
+            Parent = actor;
             MaxHealth = Math.Max(1, maxHealth);
             Health = MaxHealth;
         }
@@ -29,6 +34,9 @@ namespace Roguelike.Entities
             Defense = Math.Max(0, def ?? Defense);
             DodgeChance = Math.Max(0, Math.Min(dodge ?? DodgeChance, 50)); // 50% max dodge chance
             CritChance = Math.Max(0, crit ?? CritChance);
+
+            if (Parent is Player)
+                ScreenContainer.Instance.PlayerStats.UpdatePlayerStats();
         }
     }
 }

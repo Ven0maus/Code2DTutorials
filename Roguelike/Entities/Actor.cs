@@ -10,7 +10,7 @@ namespace Roguelike.Entities
     {
         protected Actor(Color foreground, Color background, int glyph, int zIndex, int maxHealth) : base(foreground, background, glyph, zIndex)
         {
-            Stats = new ActorStats(maxHealth);
+            Stats = new ActorStats(this, maxHealth);
         }
 
         public bool IsAlive => Stats.Health > 0;
@@ -49,11 +49,11 @@ namespace Roguelike.Entities
             return Move(position.X, position.Y);
         }
 
-        public void ApplyDamage(int health)
+        public virtual void ApplyDamage(int health)
         {
             Stats.Health -= health;
 
-            if (!IsAlive)
+            if (!IsAlive && ScreenContainer.Instance.World.ActorManager.Contains(this))
             {
                 OnDeath();
             }
@@ -61,11 +61,9 @@ namespace Roguelike.Entities
 
         protected virtual void OnDeath()
         {
-            // Remove from the actor manager if it contains it
-            if (ScreenContainer.Instance.World.ActorManager.Contains(this))
-            {
-                ScreenContainer.Instance.World.ActorManager.Remove(this);
-            }
+            // Remove from manager so its no longer rendered
+            ScreenContainer.Instance.World.ActorManager.Remove(this);
+            MessagesScreen.WriteLine($"{Name} has died.");
         }
     }
 }

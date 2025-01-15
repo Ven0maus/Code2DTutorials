@@ -8,21 +8,22 @@ namespace Roguelike.Logic
     {
         internal static void Attack(Actor attacker, Actor defender)
         {
-            var damage = CalculateDamage(attacker.Stats, defender.Stats);
+            var damage = CalculateDamage(attacker.Stats, defender.Stats, out bool isCriticalHit);
 
             if (damage > 0)
             {
+                MessagesScreen.WriteLine($"{attacker.Name} has attacked {defender.Name} for {damage}{(isCriticalHit ? "critical" : "")} damage.");
                 defender.ApplyDamage(damage);
-                System.Console.WriteLine($"{attacker.Name} has attacked {defender.Name} for {damage} damage.");
             }
             else
             {
-                System.Console.WriteLine("The attack was dodged!");
+                MessagesScreen.WriteLine($"{defender.Name} dodged the attack by {attacker.Name}!");
             }
         }
 
-        internal static int CalculateDamage(ActorStats attacker, ActorStats defender)
+        internal static int CalculateDamage(ActorStats attacker, ActorStats defender, out bool isCriticalHit)
         {
+            isCriticalHit = false;
             var random = ScreenContainer.Instance.Random;
 
             // Dodge chance
@@ -32,10 +33,7 @@ namespace Roguelike.Logic
             }
 
             // Critical Hit Check
-            bool isCriticalHit = random.Next(0, 100) < attacker.CritChance;
-            if (isCriticalHit)
-                System.Console.WriteLine("Critical hit!");
-
+            isCriticalHit = random.Next(0, 100) < attacker.CritChance;
             float critMultiplier = isCriticalHit ? 1.5f : 1.0f;
 
             // Base Damage (Proportional Scaling with randomness)

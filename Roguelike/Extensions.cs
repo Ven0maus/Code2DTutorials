@@ -1,4 +1,5 @@
-﻿using SadRogue.Primitives;
+﻿using SadConsole;
+using SadRogue.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,5 +40,15 @@ namespace Roguelike
             new Point(-1, 0), new Point(1, 0), new Point(0, -1), new Point(0, 1),
             new Point(-1, -1), new Point(-1, 1), new Point(1, -1), new Point(1, 1)
         ];
+
+        internal static void DrawBorderWithTitle(this ICellSurface surface, string title, Color borderColor, Color titleColor)
+        {
+            // Draw borders
+            var shapeParams = ShapeParameters.CreateStyledBox(ICellSurface.ConnectedLineThick, new ColoredGlyph(borderColor), ignoreBorderBackground: true);
+            surface.DrawBox(new Rectangle(0, 0, surface.Width, surface.Height), shapeParams);
+
+            // Print title
+            surface.Print(surface.Width / 2 - title.Length / 2, 0, new ColoredString(title, titleColor, Color.Transparent));
+        }
     }
 }
