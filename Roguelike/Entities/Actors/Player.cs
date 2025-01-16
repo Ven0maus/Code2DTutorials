@@ -39,6 +39,18 @@ namespace Roguelike.Entities.Actors
             PositionChanged += Player_PositionChanged;
             Position = position;
         }
+        
+        public void ExploreCurrentFov()
+        {
+            // Used when we teleport
+            var tilemap = ScreenContainer.Instance.World.Tilemap;
+            foreach (var point in FieldOfView.CurrentFOV)
+            {
+                tilemap[point.X, point.Y].IsVisible = true;
+                tilemap[point.X, point.Y].InFov = true;
+                ScreenContainer.Instance.World.Surface.IsDirty = true;
+            }
+        }
 
         private void ExploreTilemap()
         {

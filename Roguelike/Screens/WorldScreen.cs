@@ -56,6 +56,9 @@ namespace Roguelike.Screens
             {
                 // Update player position to the new position
                 Player.Position = spawnPosition;
+
+                // Do a full explore, because the "newly seen" tiles might not fully encompass all tiles because of teleportation.
+                Player.ExploreCurrentFov();
             }
             
             // Create npcs
