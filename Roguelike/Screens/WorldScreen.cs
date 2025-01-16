@@ -77,6 +77,9 @@ namespace Roguelike.Screens
             ScreenContainer.Instance.World.ActorManager.Clear();
             ScreenContainer.Instance.World.ActorManager.Add(Player);
 
+            // between playerlvl -2 or the playerlvl +1
+            var levelRequirement = (min: Math.Max(1, Player.Stats.Level - 2), max: Player.Stats.Level + 1);
+
             const int maxNpcPerRoom = 2;
             foreach (var room in dungeonRooms)
             {
@@ -94,7 +97,10 @@ namespace Roguelike.Screens
                     var randomPosition = validPositions[ScreenContainer.Instance.Random.Next(0, validPositions.Count)];
 
                     // Create the goblin npc with the given position and add it to the actor manager
+                    // Have the goblins be around the same level as the player
                     var goblin = new Goblin(randomPosition);
+                    goblin.Stats.SetLevel(ScreenContainer.Instance.Random.Next(levelRequirement.min, levelRequirement.max + 1));
+
                     ActorManager.Add(goblin);
 
                     // Make sure we don't spawn another at this position

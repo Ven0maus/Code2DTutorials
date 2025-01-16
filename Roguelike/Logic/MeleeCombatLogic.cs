@@ -8,12 +8,22 @@ namespace Roguelike.Logic
     {
         internal static void Attack(Actor attacker, Actor defender)
         {
+            if (!attacker.IsAlive || !defender.IsAlive) return;
             var damage = CalculateDamage(attacker.Stats, defender.Stats, out bool isCriticalHit);
 
             if (damage > 0)
             {
                 MessagesScreen.WriteLine($"{attacker.Name} has attacked {defender.Name} for {damage}{(isCriticalHit ? "critical" : "")} damage.");
                 defender.ApplyDamage(damage);
+
+                if (!defender.IsAlive)
+                {
+                    MessagesScreen.WriteLine($"{attacker.Name} has received {defender.Stats.ExperienceWorth} experience.");
+                    var level = attacker.Stats.Level; // store old level before adding experience
+                    attacker.Stats.AddExperience(defender.Stats.ExperienceWorth);
+                    if (level < attacker.Stats.Level)
+                        MessagesScreen.WriteLine($"{attacker.Name} has leveled up!");
+                }
             }
             else
             {

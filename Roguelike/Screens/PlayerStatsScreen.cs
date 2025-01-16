@@ -25,6 +25,8 @@ namespace Roguelike.Screens
             Surface.Print(2, 4, $"DEF:   {Player.Stats.Defense}");
             Surface.Print(2, 5, $"AGI:   {Player.Stats.DodgeChance}");
             Surface.Print(2, 6, $"CRIT:  {Player.Stats.CritChance}");
+            Surface.Print(2, 8, $"LVL:   {Player.Stats.Level}");
+            Surface.Print(2, 9, $"EXP:   {Player.Stats.Experience}/{Player.Stats.RequiredExperience}");
         }
     }
 }
