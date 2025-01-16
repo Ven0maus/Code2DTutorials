@@ -20,7 +20,26 @@ namespace Roguelike.Logic
         /// <param name="intendedPosition">The position the player was trying to move to on this tick.</param>
         internal static void Tick(Point intendedPosition)
         {
+            if (HandleStairs(intendedPosition))
+                return;
+
             HandlePathfindingAndCombat(intendedPosition);
+        }
+
+        private static bool HandleStairs(Point intendedPosition)
+        {
+            var hasMoved = Player.Position == intendedPosition;
+            if (!hasMoved) return false;
+
+            // Check if we moved onto a stairs down tile
+            var tile = ScreenContainer.Instance.World.Tilemap[intendedPosition.ToIndex(ScreenContainer.Instance.World.Tilemap.Width)];
+            if (tile.Type == World.TileType.StairsDown)
+            {
+                // Generate a new world / dungeon when going stairs down
+                ScreenContainer.Instance.World.Generate();
+                return true;
+            }
+            return false;
         }
 
         private static void HandlePathfindingAndCombat(Point intendedPosition)

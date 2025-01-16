@@ -26,5 +26,12 @@
     "Foreground": "#ff4500",
     "Background": "#00000000",
     "Glyph": "+"
+  },
+  {
+    "Type": "StairsDown",
+    "Obstruction": "VisionBlocked",
+    "Foreground": "#828282",
+    "Background": "#00000000",
+    "Glyph": 31
   }
 ]

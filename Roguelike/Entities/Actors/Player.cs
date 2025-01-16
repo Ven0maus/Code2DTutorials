@@ -110,7 +110,8 @@ namespace Roguelike.Entities.Actors
             var moved = base.Move(x, y);
 
             // Execute a game logic tick on movement, even if movement failed
-            GameLogic.Tick(new Point(x, y));
+            if (IsAlive)
+                GameLogic.Tick(new Point(x, y));
 
             return moved;
         }

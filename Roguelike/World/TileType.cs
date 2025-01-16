@@ -5,6 +5,7 @@
         None,
         Floor,
         Wall,
-        Door
+        Door,
+        StairsDown
     }
 }

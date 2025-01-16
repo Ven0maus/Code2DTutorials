@@ -54,8 +54,6 @@ namespace Roguelike
         {
             var world = ScreenContainer.Instance.World;
             world.Generate();
-            world.CreatePlayer();
-            world.CreateNpcs();
         }
 
         private static (int width, int height) DefineScreenSizeByResolution()

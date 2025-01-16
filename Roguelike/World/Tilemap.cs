@@ -80,8 +80,11 @@ namespace Roguelike.World
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    Tiles[Point.ToIndex(x, y, Width)].Clear();
+                    Tiles[Point.ToIndex(x, y, Width)].Type = TileType.None;
+                    Tiles[Point.ToIndex(x, y, Width)].InFov = false;
+                    Tiles[Point.ToIndex(x, y, Width)].IsVisible = false;
                     Tiles[Point.ToIndex(x, y, Width)].Obstruction = ObstructionType.FullyBlocked;
+                    Tiles[Point.ToIndex(x, y, Width)].Clear();
                 }
             }
         }

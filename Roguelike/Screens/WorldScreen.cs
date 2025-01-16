@@ -20,8 +20,6 @@ namespace Roguelike.Screens
 
         public Player Player { get; private set; }
 
-        private IReadOnlyList<Rectangle> _dungeonRooms;
-
         public WorldScreen(int width, int height) : base(width, height)
         {
             // Setup tilemap
@@ -40,24 +38,47 @@ namespace Roguelike.Screens
 
         public void Generate()
         {
-            DungeonGenerator.Generate(Tilemap, 10, 4, 10, out _dungeonRooms);
-            if (_dungeonRooms.Count == 0)
+            Surface.Clear();
+
+            // Generate new dungeon layout
+            DungeonGenerator.Generate(Tilemap, 10, 4, 10, out var dungeonRooms);
+            if (dungeonRooms.Count == 0)
                 throw new Exception("Faulty dungeon generation, no rooms!");
+
+            var spawnPosition = dungeonRooms[0].Center;
+
+            if (Player == null)
+            {
+                // Init player if doesn't exist yet
+                CreatePlayer(spawnPosition);
+            }
+            else
+            {
+                // Update player position to the new position
+                Player.Position = spawnPosition;
+            }
+            
+            // Create npcs
+            CreateNpcs(dungeonRooms);
         }
 
-        public void CreatePlayer()
+        public void CreatePlayer(Point position)
         {
-            Player = new Player(_dungeonRooms[0].Center);
+            Player = new Player(position);
             ActorManager.Add(Player);
 
             // Initial player stats draw
             ScreenContainer.Instance.PlayerStats.UpdatePlayerStats();
         }
 
-        public void CreateNpcs()
+        public void CreateNpcs(IReadOnlyList<Rectangle> dungeonRooms)
         {
+            // Cleanup old npcs but re-add the player
+            ScreenContainer.Instance.World.ActorManager.Clear();
+            ScreenContainer.Instance.World.ActorManager.Add(Player);
+
             const int maxNpcPerRoom = 2;
-            foreach (var room in _dungeonRooms)
+            foreach (var room in dungeonRooms)
             {
                 // Define how many npcs will be in this room
                 var npcs = ScreenContainer.Instance.Random.Next(0, maxNpcPerRoom + 1);
