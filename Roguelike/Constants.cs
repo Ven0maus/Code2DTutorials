@@ -9,6 +9,5 @@
         public const string Font = "Fonts/LCD_Tileset.font";
         public const string TileConfiguration = "World/Configuration/tiles.json";
         public const int PlayerFieldOfViewRadius = 6;
-        public static (int width, int height) Resolution = (1280, 720);
     }
 }
