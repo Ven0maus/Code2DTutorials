@@ -59,7 +59,8 @@ namespace Roguelike.Logic
             var npcsInFov = Player.FieldOfView.CurrentFOV
                 .Where(ActorManager.ExistsAt)
                 .Select(ActorManager.Get)
-                .Where(a => a != Player);
+                .Where(a => a != Player)
+                .ToArray();
 
             foreach (var npcInFov in npcsInFov)
             {
