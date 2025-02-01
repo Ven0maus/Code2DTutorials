@@ -72,10 +72,9 @@ namespace Roguelike.Entities
         public void UpdateVisibility(IFOV fieldOfView = null)
         {
             var fov = fieldOfView ?? ScreenContainer.Instance.World.Player.FieldOfView;
-            var currentFov = fov.CurrentFOV.ToHashSet();
             foreach (var actor in _actors)
             {
-                actor.Value.IsVisible = currentFov.Contains(actor.Key);
+                actor.Value.IsVisible = fov.BooleanResultView[actor.Key];
             }
         }
 
